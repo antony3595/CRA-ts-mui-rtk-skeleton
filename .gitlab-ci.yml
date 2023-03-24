@@ -1,0 +1,72 @@
+stages:
+  - build
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+build_frontend_stage:
+  image: node:16.19.0-alpine
+  stage: build
+  artifacts:
+    paths:
+      - build/
+  cache:
+    paths:
+      - node_modules/
+      - build/
+  script:
+    - npm install -g create-react-app
+    - npm install && REACT_APP_BUILD_TYPE=development PUBLIC_URL=/base npm run build --silent
+  only:
+    - dev
+
+deploy_to_stage:
+  stage: deploy
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$STAGE_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $STAGE_HOST_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ls build/
+    - scp -r build/* $STAGE_HOST_USER@$STAGE_HOST_IP:/destination/folder
+  when: manual
+  only:
+    - dev
+
+build_frontend_prod:
+  image: node:16.19.0-alpine
+  stage: build
+  artifacts:
+    paths:
+      - build/
+  cache:
+    paths:
+      - node_modules/
+      - build/
+  script:
+    - npm install -g create-react-app
+    - npm install && REACT_APP_BUILD_TYPE=production npm run build --silent
+  only:
+    - master
+
+deploy_to_production:
+  stage: deploy
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$PROD_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $PROD_HOST_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ls build/
+    - ssh -o StrictHostKeyChecking=no $PROD_HOST_USER@$PROD_HOST_IP "ls -la /destination/folder"
+    - scp -rv build/* $PROD_HOST_USER@$PROD_HOST_IP:/destination/folder/
+  when: manual
+  only:
+    - master

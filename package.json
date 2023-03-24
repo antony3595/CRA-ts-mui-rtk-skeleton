@@ -1,0 +1,88 @@
+{
+	"name": "change_name",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@ckeditor/ckeditor5-alignment": "^35.4.0",
+		"@ckeditor/ckeditor5-build-classic": "^35.4.0",
+		"@ckeditor/ckeditor5-build-decoupled-document": "^35.4.0",
+		"@ckeditor/ckeditor5-html-embed": "^35.4.0",
+		"@ckeditor/ckeditor5-react": "^5.0.3",
+		"@date-io/date-fns": "^2.16.0",
+		"@emotion/react": "^11.10.5",
+		"@emotion/styled": "^11.10.5",
+		"@mui/icons-material": "^5.10.15",
+		"@mui/lab": "^5.0.0-alpha.110",
+		"@mui/material": "^5.10.15",
+		"@mui/styled-engine-sc": "^5.10.14",
+		"@mui/x-data-grid": "^5.17.13",
+		"@mui/x-date-pickers": "^5.0.11",
+		"@reduxjs/toolkit": "^1.9.0",
+		"@testing-library/jest-dom": "^5.16.5",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^14.4.3",
+		"@types/date-fns": "^2.6.0",
+		"@types/jest": "^27.5.2",
+		"@types/node": "^17.0.45",
+		"@types/react": "^18.0.25",
+		"@types/react-dom": "^18.0.9",
+		"axios": "^1.2.0",
+		"date-fns": "^2.28.0",
+		"eslint": "^8.28.0",
+		"file-saver": "^2.0.5",
+		"formik": "^2.2.9",
+		"localforage": "^1.10.0",
+		"match-sorter": "^6.3.1",
+		"notistack": "^2.0.8",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-draggable": "^4.4.5",
+		"react-dropzone": "^14.2.3",
+		"react-minimal-pie-chart": "^8.4.0",
+		"react-redux": "^8.0.5",
+		"react-router-dom": "^6.4.3",
+		"react-scripts": "5.0.1",
+		"react-transition-group": "^4.4.5",
+		"react-window": "^1.8.8",
+		"sort-by": "^1.2.0",
+		"styled-components": "^5.3.6",
+		"typescript": "^4.9.3",
+		"util": "^0.12.5",
+		"web-vitals": "^2.1.4",
+		"yup": "^0.32.11"
+	},
+	"scripts": {
+		"start": "REACT_APP_BUILD_TYPE=$REACT_APP_BUILD_TYPE react-scripts start",
+		"build": "REACT_APP_BUILD_TYPE=$REACT_APP_BUILD_TYPE CI=false react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
+		"@types/ckeditor__ckeditor5-build-decoupled-document": "^29.1.1",
+		"@types/file-saver": "^2.0.5",
+		"@types/react-window": "^1.8.5",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"prettier": "^2.8.0",
+		"sass": "^1.56.1"
+	}
+}
