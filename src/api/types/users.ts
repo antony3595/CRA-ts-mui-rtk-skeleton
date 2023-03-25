@@ -6,9 +6,9 @@ export interface UserMin {
 }
 
 export interface CurrentUser extends UserMin {
-	first_name: string;
-	last_name: string;
-	middle_name: string;
+	first_name: string | null;
+	last_name: string | null;
+	middle_name: string | null;
 	phone: string | null;
 	email: string;
 	role: Role;
@@ -37,9 +37,9 @@ export interface AccountsFilterParams extends PageableParams {
 
 export interface AccountUpdateDTO {
 	username: string;
-	first_name: string;
-	last_name: string;
-	middle_name: string;
+	first_name: string | null;
+	last_name: string | null;
+	middle_name: string | null;
 	phone: string | null;
 	is_active: boolean;
 	role: Role;

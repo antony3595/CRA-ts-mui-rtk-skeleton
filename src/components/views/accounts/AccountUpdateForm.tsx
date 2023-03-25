@@ -32,7 +32,7 @@ const schema = yup.object().shape({
 	first_name: yup.string().nullable(),
 	last_name: yup.string().nullable(),
 	middle_name: yup.string().nullable(),
-	phone: yup.string().required(strings.required_field),
+	phone: yup.string().nullable(),
 	is_active: yup.boolean().required(strings.required_field),
 	role: yup.mixed().oneOf([Role.ADMIN, Role.MANAGER], "Невалидное значение"),
 });

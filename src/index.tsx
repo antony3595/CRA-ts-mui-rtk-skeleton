@@ -8,10 +8,16 @@ import "./index.scss";
 import { SnackbarProvider } from "notistack";
 import GlobalErrorsSnackbar from "./components/common/GlobalErrorsSnackbar";
 import "@ckeditor/ckeditor5-build-classic/build/translations/ru";
+import config from "./config";
+import { BuildType } from "./types/config";
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container = document.getElementById("root")!;
 const root = createRoot(container);
+
+if (config.BUILD_TYPE === BuildType.MOCK) {
+	import("./mock/mocker").then(({ enableMockAPI }) => enableMockAPI());
+}
 
 root.render(
 	<Provider store={store}>
