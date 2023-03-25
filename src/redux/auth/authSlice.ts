@@ -27,7 +27,6 @@ const initialState: AuthState = {
 			email: "",
 			role: Role.MANAGER,
 			groups: [],
-			department: null,
 		},
 	},
 };

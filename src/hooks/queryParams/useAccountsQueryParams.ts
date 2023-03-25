@@ -10,7 +10,6 @@ export const useAccountsQueryParams = (): AccountsFilterParams => {
 	const [searchQS] = useQueryState("search");
 	const [is_active] = useQueryState("is_active");
 	const [role] = useQueryState("role");
-	const [department] = useQueryState("department");
 
 	return useMemo<AccountsFilterParams>(() => {
 		return {
@@ -19,7 +18,6 @@ export const useAccountsQueryParams = (): AccountsFilterParams => {
 			search: searchQS || undefined,
 			role: role || undefined,
 			is_active: stringToBoolean(is_active),
-			department: department || undefined,
 		};
-	}, [page, pageSize, searchQS, is_active, role, department]);
+	}, [page, pageSize, searchQS, is_active, role]);
 };
