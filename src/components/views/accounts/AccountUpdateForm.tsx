@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { useSnackbar } from "notistack";
 import { Box, Checkbox, Container, FormControlLabel, FormHelperText, MenuItem, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import { AccountUpdateDTO, SimpleGroup, User } from "../../../api/types/users";
+import { AccountUpdateDTO, User } from "../../../api/types/users";
 import strings from "../../../constants/strings";
 import { AxiosResponse } from "axios";
 import { getApiErrors, getApiResponseErrorMessage } from "../../../utils/errorsUtils";
@@ -19,12 +19,10 @@ interface UpdateAccountFormProps {
 	account: User;
 	closeModal: () => void;
 	onSuccess: () => void;
-	groups: SimpleGroup[];
 	isLoading: boolean;
 }
 
-interface UpdateAccountFormValues extends Omit<AccountUpdateDTO, "groups"> {
-	groups: SimpleGroup[];
+interface UpdateAccountFormValues extends AccountUpdateDTO {
 	id: number;
 }
 
@@ -37,10 +35,8 @@ const schema = yup.object().shape({
 	phone: yup.string().required(strings.required_field),
 	is_active: yup.boolean().required(strings.required_field),
 	role: yup.mixed().oneOf([Role.ADMIN, Role.MANAGER], "Невалидное значение"),
-	groups: yup.array().of(yup.object().shape({ id: yup.number(), name: yup.string() })),
 });
 
-// TODO удалить группы на бэке и тут, если не будут использоваться
 const UpdateAccountForm = ({ closeModal, onSuccess, isLoading, account }: UpdateAccountFormProps) => {
 	const validationSchema = schema;
 	const { enqueueSnackbar } = useSnackbar();
@@ -48,7 +44,6 @@ const UpdateAccountForm = ({ closeModal, onSuccess, isLoading, account }: Update
 	const initialValues: UpdateAccountFormValues = {
 		id: account.id,
 		first_name: account.first_name,
-		groups: account.groups,
 		is_active: account.is_active,
 		last_name: account.last_name,
 		middle_name: account.middle_name,
@@ -77,7 +72,7 @@ const UpdateAccountForm = ({ closeModal, onSuccess, isLoading, account }: Update
 			}
 		};
 		const userId = values.id;
-		const data: AccountUpdateDTO = { ...values, groups: values.groups.map((group) => group.id) };
+		const data: AccountUpdateDTO = values;
 		updateUser(userId, data)
 			.then(onSuccessResponse)
 			.catch(onErrorResponse)

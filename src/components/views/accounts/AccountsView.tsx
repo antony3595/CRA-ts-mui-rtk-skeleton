@@ -14,7 +14,6 @@ import { Role } from "../../../api/types/base";
 import { SlideUpTransition } from "../../common/Transitions";
 import { useAuth } from "../../../hooks/useAuth";
 import { usePaginatedAccountsLoader } from "../../../hooks/api/accounts/usePaginatedAccountsLoader";
-import { useGroupsLoader } from "../../../hooks/api/groups/useGroupsLoader";
 
 const AccountsView = () => {
 	useTitle(strings.accounts);
@@ -24,9 +23,7 @@ const AccountsView = () => {
 	const [isAccountsFetching, paginatedAccounts, updateAccounts] = usePaginatedAccountsLoader();
 	const { results: accounts, count: accountsCount } = paginatedAccounts;
 
-	const [isGroupsFetching, groups] = useGroupsLoader();
-
-	const isLoading = isAccountsFetching || isGroupsFetching;
+	const isLoading = isAccountsFetching;
 
 	const [isCreateFormOpen, setCreateFormOpen] = useState<boolean>(false);
 
@@ -54,13 +51,7 @@ const AccountsView = () => {
 			<Box mb={2}>
 				<AccountFilters />
 			</Box>
-			<AccountsTable
-				accounts={accounts}
-				totalElements={accountsCount}
-				isLoading={isLoading}
-				groups={groups}
-				updateList={updateAccounts}
-			/>
+			<AccountsTable accounts={accounts} totalElements={accountsCount} isLoading={isLoading} updateList={updateAccounts} />
 
 			<ClosableModal
 				maxWidth={"md"}
@@ -71,12 +62,7 @@ const AccountsView = () => {
 				disableBackdropClick
 				TransitionComponent={SlideUpTransition}
 			>
-				<CreateAccountForm
-					closeModal={() => setCreateFormOpen(false)}
-					isLoading={isAccountsFetching || isGroupsFetching}
-					onSuccess={updateAccounts}
-					groups={groups}
-				/>
+				<CreateAccountForm closeModal={() => setCreateFormOpen(false)} isLoading={isAccountsFetching} onSuccess={updateAccounts} />
 			</ClosableModal>
 		</PageWrapper>
 	);

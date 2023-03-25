@@ -9,10 +9,9 @@ export interface CurrentUser extends UserMin {
 	first_name: string;
 	last_name: string;
 	middle_name: string;
-	phone: string;
+	phone: string | null;
 	email: string;
 	role: Role;
-	groups: SimpleGroup[];
 }
 
 export interface User extends CurrentUser {
@@ -41,10 +40,9 @@ export interface AccountUpdateDTO {
 	first_name: string;
 	last_name: string;
 	middle_name: string;
-	phone: string;
+	phone: string | null;
 	is_active: boolean;
 	role: Role;
-	groups: number[];
 }
 
 export interface AccountCreateDTO {
@@ -58,7 +56,6 @@ export interface AccountCreateDTO {
 	phone: string;
 	is_active: boolean;
 	role: Role;
-	groups: number[];
 }
 
 export interface SimpleGroup {

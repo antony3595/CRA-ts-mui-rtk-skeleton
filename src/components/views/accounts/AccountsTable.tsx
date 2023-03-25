@@ -6,7 +6,7 @@ import BlockIcon from "@mui/icons-material/Block";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
-import { SimpleGroup, User } from "../../../api/types/users";
+import { User } from "../../../api/types/users";
 import strings from "../../../constants/strings";
 import MyDataGrid from "../../common/MyDataGrid/MyDataGrid";
 import { TooltipCell } from "../../common/MyDataGrid/cells/TooltipCell";
@@ -26,10 +26,9 @@ interface AccountsTableProps {
 	isLoading: boolean;
 	totalElements: number;
 	updateList: () => void;
-	groups: SimpleGroup[];
 }
 
-const AccountsTable: React.FC<AccountsTableProps> = ({ accounts, isLoading, totalElements, updateList, groups }) => {
+const AccountsTable: React.FC<AccountsTableProps> = ({ accounts, isLoading, totalElements, updateList }) => {
 	const { enqueueSnackbar } = useSnackbar();
 
 	const [blockFormOpen, setBlockFormOpen] = useState<boolean>(false);
@@ -229,7 +228,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ accounts, isLoading, tota
 						closeModal={() => setUpdateFormOpen(false)}
 						isLoading={isLoading}
 						onSuccess={updateList}
-						groups={groups}
 						account={activeRowValue}
 					/>
 				)}

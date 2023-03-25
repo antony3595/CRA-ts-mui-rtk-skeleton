@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { useSnackbar } from "notistack";
 import { Box, Checkbox, Container, FormControlLabel, FormHelperText, MenuItem, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import { AccountCreateDTO, SimpleGroup, User } from "../../../api/types/users";
+import { AccountCreateDTO, User } from "../../../api/types/users";
 import strings from "../../../constants/strings";
 import { AxiosResponse } from "axios";
 import { getApiErrors, getApiResponseErrorMessage } from "../../../utils/errorsUtils";
@@ -19,13 +19,10 @@ import { createUser } from "../../../api/admin/users";
 interface CreateAccountFormProps {
 	closeModal: () => void;
 	onSuccess: () => void;
-	groups: SimpleGroup[];
 	isLoading: boolean;
 }
 
-interface AccountCreateFormValues extends Omit<AccountCreateDTO, "groups"> {
-	groups: SimpleGroup[];
-}
+type AccountCreateFormValues = AccountCreateDTO;
 
 const schema = yup.object().shape({
 	username: yup.string().required(strings.required_field),
@@ -39,13 +36,11 @@ const schema = yup.object().shape({
 	phone: yup.string().required(strings.required_field),
 	is_active: yup.boolean().required(strings.required_field),
 	role: yup.mixed().oneOf(Object.values(Role), "Невалидное значение"),
-	groups: yup.array().of(yup.object().shape({ id: yup.number(), name: yup.string() })),
 });
 
 const emptyFormValues: AccountCreateFormValues = {
 	email: "",
 	first_name: "",
-	groups: [],
 	is_active: true,
 	last_name: "",
 	middle_name: "",
@@ -56,7 +51,7 @@ const emptyFormValues: AccountCreateFormValues = {
 	username: "",
 };
 
-const CreateAccountForm = ({ closeModal, onSuccess, groups, isLoading }: CreateAccountFormProps) => {
+const CreateAccountForm = ({ closeModal, onSuccess, isLoading }: CreateAccountFormProps) => {
 	const validationSchema = schema;
 	const { enqueueSnackbar } = useSnackbar();
 
@@ -82,7 +77,7 @@ const CreateAccountForm = ({ closeModal, onSuccess, groups, isLoading }: CreateA
 			}
 		};
 
-		const data = { ...values, groups: values.groups.map((group) => group.id) };
+		const data: AccountCreateDTO = values;
 		createUser(data)
 			.then(onSuccessResponse)
 			.catch(onErrorResponse)

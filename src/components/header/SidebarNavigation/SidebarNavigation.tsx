@@ -41,9 +41,6 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ closeSidebar }) =
 						<ListSubheader sx={{ backgroundColor: "secondary.main" }}>{strings.administration}</ListSubheader>
 					)}
 					{getFilteredNavLinks(adminNavLinks, auth, closeSidebar)}
-					{hasOneOfRoles(auth, [Role.ADMIN, Role.MANAGER]) && (
-						<ListSubheader sx={{ backgroundColor: "secondary.main" }}>{strings.for_stuff}</ListSubheader>
-					)}
 				</List>
 			</div>
 		</div>
