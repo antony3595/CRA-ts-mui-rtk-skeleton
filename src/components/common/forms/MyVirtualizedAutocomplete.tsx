@@ -7,9 +7,8 @@ import Popper from "@mui/material/Popper";
 import { styled, useTheme } from "@mui/material/styles";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
 import Typography from "@mui/material/Typography";
-import { AutocompleteProps } from "@mui/material/Autocomplete/Autocomplete";
+import { AutocompleteProps, AutocompleteRenderInputParams } from "@mui/material/Autocomplete/Autocomplete";
 import { ChipTypeMap } from "@mui/material/Chip";
-import { PartialBy } from "../../../types/global";
 
 const LISTBOX_PADDING = 8; // px
 
@@ -117,18 +116,30 @@ const StyledPopper = styled(Popper)({
 	},
 });
 
-interface MyVirtualizedAutocompleteProps<
+type MyVirtualizedAutocompleteProps<
 	T,
 	Multiple extends boolean | undefined,
 	DisableClearable extends boolean | undefined,
 	FreeSolo extends boolean | undefined,
 	ChipComponent extends React.ElementType = ChipTypeMap["defaultComponent"]
-> extends PartialBy<AutocompleteProps<T, Multiple, DisableClearable, FreeSolo, ChipComponent>, "renderInput"> {
+> = Omit<AutocompleteProps<T, Multiple, DisableClearable, FreeSolo, ChipComponent>, "renderInput"> & {
 	getOptionDisplay: (option: T) => string;
-	label?: React.ReactNode;
-	helperText?: string | string[];
-	error?: boolean;
-}
+} & (
+		| {
+				renderInput?: never;
+				label: React.ReactNode;
+				helperText?: string | string[];
+				error: boolean;
+				required?: boolean;
+		  }
+		| {
+				renderInput: (params: AutocompleteRenderInputParams) => React.ReactNode;
+				label?: never;
+				helperText?: never;
+				error?: never;
+				required?: boolean;
+		  }
+	);
 
 const MyVirtualizedAutocomplete = <
 	T,
@@ -140,6 +151,8 @@ const MyVirtualizedAutocomplete = <
 	getOptionDisplay,
 	helperText,
 	error,
+	renderInput,
+	required=false,
 	...props
 }: MyVirtualizedAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) => (
 	<Autocomplete
@@ -148,8 +161,8 @@ const MyVirtualizedAutocomplete = <
 		ListboxComponent={ListBoxComponent}
 		renderOption={(props, option) => [props, { ...option, label: getOptionDisplay(option) }] as React.ReactNode}
 		renderGroup={(params) => params as unknown as React.ReactNode}
+		renderInput={renderInput ? renderInput : (params) => <TextField required={required} helperText={helperText} error={error} {...params} label={label} />}
 		{...props}
-		renderInput={(params) => <TextField helperText={helperText} error={error} {...params} label={label} />}
 	/>
 );
 export default MyVirtualizedAutocomplete;

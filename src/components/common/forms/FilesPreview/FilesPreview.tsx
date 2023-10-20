@@ -18,6 +18,8 @@ type FilesPreviewProps<T extends File, L extends WithAttachedFileLink> = {
 			getActions?: (item: T, closeMenu: () => void) => React.ReactNode[];
 			getLinkActions?: never;
 			onBackdropClick?: (item: T) => void;
+			isError?: boolean;
+			errors?: string[];
 	  }
 	| {
 			files?: never;
@@ -26,6 +28,8 @@ type FilesPreviewProps<T extends File, L extends WithAttachedFileLink> = {
 			onBackdropClick?: (item: L) => void;
 
 			getLinkActions?: (item: L, closeMenu: () => void) => React.ReactNode[];
+			isError?: never;
+			errors?: never[];
 	  }
 );
 
@@ -36,14 +40,16 @@ const FilePreviews = <T extends File, L extends WithAttachedFileLink>({
 	getLinkActions,
 	disableImageModal = false,
 	showActionsInMenu = true,
+	isError,
+	errors,
 }: FilesPreviewProps<T, L>) => {
 	const [selectedFileLink, setSelectedFileLink] = useState<string | null>(null);
 	const [isImageModalOpen, setImageModalOpen] = useState<boolean>(false);
 
 	const openLinkImageModal = (item: L) => {
-		const extension = getUrlExtension(item.attached_file);
+		const extension = getUrlExtension(item.file);
 		if (isImageExtension(extension)) {
-			setSelectedFileLink(item.attached_file);
+			setSelectedFileLink(item.file);
 			setImageModalOpen(true);
 		}
 	};
@@ -64,7 +70,7 @@ const FilePreviews = <T extends File, L extends WithAttachedFileLink>({
 	return (
 		<Box>
 			<Grid component={TransitionGroup} container flexWrap={"wrap"} direction={"row"}>
-				{files.map((file) => (
+				{files.map((file, index) => (
 					<Grid component={Collapse} orientation={"horizontal"} in={true} key={file.name} item>
 						<Box sx={{ pl: 2, pt: 2, boxSizing: "border-box" }}>
 							<FilePreviewItem
@@ -73,6 +79,8 @@ const FilePreviews = <T extends File, L extends WithAttachedFileLink>({
 								hideDownloadButton
 								file={file}
 								getActions={getActions}
+								error={isError}
+								helperText={(Array.isArray(errors) && errors.at(index)) || undefined}
 							/>
 						</Box>
 					</Grid>

@@ -6,21 +6,14 @@ import Typography from "@mui/material/Typography";
 import { ArrayElement } from "../../../../utils/tsUtils";
 import VirtualizedChecklist from "./VirtualizedChecklist";
 import { KeysOfType } from "../../../../types/global";
+import { intersection, not } from "../../../../utils/arrayUtils";
 
-function not<T>(a: readonly T[], b: readonly T[], key: keyof T) {
-	return a.filter((valueA) => !b.find((valueB) => valueA[key] == valueB[key]));
-}
-
-function intersection<T>(a: readonly T[], b: readonly T[], key: keyof T) {
-	return a.filter((valueA) => !!b.find((valueB) => valueA[key] == valueB[key]));
-}
-
-interface TransferListProps<T extends object> {
+interface TransferListProps<T> {
 	elements: T[];
-	keyField: KeysOfType<T, string | number>;
-	labelField: KeysOfType<T, string>;
-	onChange: (result: { left: T[]; right: T[] }) => void;
 	values: T[];
+	getKeyField: () => KeysOfType<T, string | number>;
+	getOptionDisplay: (element: T) => string;
+	onChange: (result: { left: T[]; right: T[] }) => void;
 	title?: string;
 }
 
@@ -28,16 +21,16 @@ const TransferList: <T extends object>(props: TransferListProps<T>) => React.Rea
 	elements,
 	values,
 	onChange,
-	keyField,
-	labelField,
+	getKeyField,
+	getOptionDisplay,
 	title,
 }) => {
 	const [checked, setChecked] = React.useState<typeof elements>([]);
-	const [left, setLeft] = React.useState<typeof elements>(not(elements, values, keyField));
+	const [left, setLeft] = React.useState<typeof elements>(not(elements, values, getKeyField()));
 	const [right, setRight] = React.useState<typeof elements>(values);
 
-	const leftChecked = intersection(checked, left, keyField);
-	const rightChecked = intersection(checked, right, keyField);
+	const leftChecked = intersection(checked, left, getKeyField());
+	const rightChecked = intersection(checked, right, getKeyField());
 
 	const handleToggle = (value: ArrayElement<typeof elements>) => {
 		const currentIndex = checked.indexOf(value);
@@ -59,14 +52,14 @@ const TransferList: <T extends object>(props: TransferListProps<T>) => React.Rea
 
 	const handleCheckedRight = () => {
 		setRight(right.concat(leftChecked));
-		setLeft(not(left, leftChecked, keyField));
-		setChecked(not(checked, leftChecked, keyField));
+		setLeft(not(left, leftChecked, getKeyField()));
+		setChecked(not(checked, leftChecked, getKeyField()));
 	};
 
 	const handleCheckedLeft = () => {
 		setLeft(left.concat(rightChecked));
-		setRight(not(right, rightChecked, keyField));
-		setChecked(not(checked, rightChecked, keyField));
+		setRight(not(right, rightChecked, getKeyField()));
+		setChecked(not(checked, rightChecked, getKeyField()));
 	};
 
 	const handleAllLeft = () => {
@@ -91,7 +84,7 @@ const TransferList: <T extends object>(props: TransferListProps<T>) => React.Rea
 						items={left}
 						checked={leftChecked}
 						handleToggle={(value) => handleToggle(value)}
-						labelField={labelField}
+						getOptionDisplay={getOptionDisplay}
 					/>
 				</Grid>
 				<Grid item sx={{ alignSelf: "center" }}>
@@ -143,7 +136,7 @@ const TransferList: <T extends object>(props: TransferListProps<T>) => React.Rea
 						items={right}
 						checked={rightChecked}
 						handleToggle={(value) => handleToggle(value)}
-						labelField={labelField}
+						getOptionDisplay={getOptionDisplay}
 					/>
 				</Grid>
 			</Grid>

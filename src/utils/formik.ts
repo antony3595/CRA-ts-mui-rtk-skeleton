@@ -22,12 +22,12 @@ interface FormikErrorProps {
 	helperText: string;
 }
 
-export const formikInputProps = <Values>(key: keyof Values, formik: FormikProps<Values>): FormikInputProps<Values> => {
+export const formikInputProps = <Values>(key: keyof Values, formik: FormikProps<Values>, defaultHelperText = " "): FormikInputProps<Values> => {
 	const isError = formik.touched[key] && Boolean(formik.errors[key]);
-	const error = formik.touched[key] && formik.errors[key] ? (formik.errors[key] as string) : " ";
+	const helperText = formik.touched[key] && formik.errors[key] ? (formik.errors[key] as string) : defaultHelperText;
 	return {
 		error: isError,
-		helperText: error,
+		helperText: helperText,
 		id: key,
 		name: key,
 		value: formik.values[key] || "",

@@ -11,7 +11,7 @@ export const getApiResponseErrorMessage = (response: AxiosResponse<BaseResponse<
 	return response.data?.error || strings.unknown_error;
 };
 
-export const getApiErrors = <T extends keyof any>(e: any, defaultMessage = strings.unknown_error): APIErrors<T> => {
+export const getApiErrors = <E>(e: any, defaultMessage = strings.unknown_error): APIErrors<E> => {
 	if (isAxiosError(e)) {
 		return { error: e.response?.data.error || defaultMessage, errors: e.response?.data.errors || null };
 	} else if (isError(e)) return { error: e.message, errors: null };
@@ -20,5 +20,5 @@ export const getApiErrors = <T extends keyof any>(e: any, defaultMessage = strin
 
 export const toastApiErrorHandler =
 	(snackbar: (message: SnackbarMessage, options?: OptionsObject | undefined) => SnackbarKey) => (e: any) => {
-		snackbar(getApiErrors(e).error);
+		snackbar(getApiErrors(e).error, { variant: "error" });
 	};

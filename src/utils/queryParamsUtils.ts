@@ -12,6 +12,10 @@ export const getUrlsSearchParamsOfObject = <T extends object>(obj: T): URLSearch
 				if (date) {
 					searchParams.set(filterKey, date);
 				}
+			} else if (value instanceof Array) {
+				value.forEach((item) => {
+					searchParams.append(filterKey, item);
+				});
 			} else {
 				searchParams.set(filterKey, value.toString());
 			}

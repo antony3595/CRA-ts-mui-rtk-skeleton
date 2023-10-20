@@ -1,7 +1,7 @@
 import useQueryState from "../useQueryState";
-import { getValidPage, getValidPageSize } from "../../components/common/MyDataGrid/MyDataGrid";
 import { useMemo } from "react";
 import { PageableParams } from "../../api/types/base";
+import { getValidPage, getValidPageSize } from "../../components/common/MyDataGrid/datagridUtils";
 
 export const usePageableQueryParams = (): PageableParams => {
 	const [page] = useQueryState("page", "1");

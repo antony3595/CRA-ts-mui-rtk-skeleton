@@ -5,7 +5,15 @@ import { ActionErrorKey } from "../../redux/actionsErrors/types";
 import { clearError, errorsSelector } from "../../redux/actionsErrors/actionsErrorsSlice";
 import { useAppSelector } from "../../redux/hooks";
 
-const globalErrorKeys: ActionErrorKey[] = ["auth", "accounts", "accountsAllMin", "groups"];
+const globalErrorKeys: ActionErrorKey[] = [
+	"token",
+	"currentUserData",
+	"users",
+	"allUsers",
+	"allGroups",
+	"paginatedGroups",
+	"allPermissions",
+];
 
 const GlobalErrorsSnackbar = () => {
 	const errors = useAppSelector(errorsSelector);

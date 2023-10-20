@@ -1,5 +1,13 @@
 import * as ep from "../endpoints";
-import { AccountCreateDTO, AccountUpdateDTO, ChangePasswordRequestDTO, ResetPasswordRequestDTO, User, UserMin } from "../types/users";
+import {
+	ChangePasswordRequestDTO,
+	CurrentUser,
+	ResetPasswordRequestDTO,
+	User,
+	UserCreateDTO,
+	UserMin,
+	UserUpdateDTO,
+} from "../types/users";
 import { BaseResponse, PageableParams, PaginatedBody } from "../types/base";
 import { adminAPI } from "../adminAPI";
 
@@ -24,12 +32,12 @@ export const unblockUser = (userId: number) => {
 export const logoutUser = () => {
 	return adminAPI.post(ep.LOGOUT, null);
 };
-export const createUser = (data: AccountCreateDTO) => {
+export const createUser = (data: UserCreateDTO) => {
 	return adminAPI.post(ep.USERS, data);
 };
-export const updateUser = (userId: number, data: AccountUpdateDTO) => {
+export const updateUser = (userId: number, data: UserUpdateDTO) => {
 	return adminAPI.put(`/users/${userId}/`, data);
 };
-export const getGroups = () => {
-	return adminAPI.get(`/groups/`);
+export const getUserData = () => {
+	return adminAPI.get<BaseResponse<CurrentUser>>(ep.CURRENT_USER);
 };

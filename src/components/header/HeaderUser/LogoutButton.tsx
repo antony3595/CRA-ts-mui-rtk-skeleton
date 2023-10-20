@@ -8,8 +8,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import { useAppDispatch } from "../../../redux/hooks";
 import { toastApiErrorHandler } from "../../../utils/errorsUtils";
 import { logout } from "../../../redux/commonActions";
-import { updateAllAPIsTokens } from "../../../utils/apiUtils";
 import { logoutUser } from "../../../api/admin/users";
+import { updateAllAPIsTokens } from "../../../redux/utils/authUtils";
 
 interface LogoutButtonProps {
 	isLoading: boolean;

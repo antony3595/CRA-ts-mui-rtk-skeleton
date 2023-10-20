@@ -4,7 +4,7 @@ import clsx from "clsx";
 import IconButton from "@mui/material/IconButton";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Menu, MenuItem, useMediaQuery, useTheme } from "@mui/material";
+import { FormHelperText, Menu, useMediaQuery, useTheme } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { BaseFilePreviewProps } from "./FilePreviewItem";
@@ -17,10 +17,14 @@ export const FileItem = <T extends File>({
 	hideDownloadButton,
 	showActionsInMenu = true,
 	onBackdropClick,
+	error = false,
+	helperText,
 }: BaseFilePreviewProps & {
 	file: T;
 	getActions?: (item: T, closeMenu: () => void) => React.ReactNode[];
 	onBackdropClick?: (item: T) => void;
+	error?: boolean;
+	helperText?: string;
 }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -38,7 +42,10 @@ export const FileItem = <T extends File>({
 	const previewImage = useMemo(() => getFilePreviewImage(file), [file]);
 
 	return (
-		<FileItemWrapper className={clsx([{ "Mui-backdropVisible": open || isMobile }])}>
+		<FileItemWrapper
+			variant={error ? "outlined" : "elevation"}
+			className={clsx([{ "Mui-backdropVisible": open || isMobile }, { error: error }])}
+		>
 			<FileImage>
 				<ImageSrc style={{ backgroundImage: `url(${previewImage})` }} />
 				<FileBackdrop
@@ -63,9 +70,7 @@ export const FileItem = <T extends File>({
 				</ActionButtons>
 				{actions && showActionsInMenu && (
 					<Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-						{actions.map((action, index) => (
-							<MenuItem key={index}>{action}</MenuItem>
-						))}
+						{actions.map((action) => action)}
 					</Menu>
 				)}
 			</FileImage>
@@ -86,6 +91,14 @@ export const FileItem = <T extends File>({
 					{file.name}
 				</Typography>
 			</FileNameWrapper>
+			<FormHelperText
+				sx={{
+					ml: "8px !important",
+				}}
+				error={error}
+			>
+				{helperText || " "}
+			</FormHelperText>
 		</FileItemWrapper>
 	);
 };

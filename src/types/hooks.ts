@@ -1,1 +1,1 @@
-export type ApiLoaderHookValue<T, DefaultType = null> = [boolean, T | DefaultType, () => void];
+export type ApiLoaderHookValue<T> = [boolean, T, () => void];

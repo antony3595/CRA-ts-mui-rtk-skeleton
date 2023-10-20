@@ -5,14 +5,14 @@ import LoginRequired from "../components/common/wrappers/LoginRequired";
 import * as u from "../urls";
 import HomeView from "../components/views/Home/HomeView";
 import ChangePasswordView from "../components/views/auth/ChangePasswordView";
-import { Role } from "../api/types/base";
-import RolesRequired from "../components/common/wrappers/RolesRequired";
+import PermissionRequired from "../components/common/wrappers/PermissionRequired";
 import { NonIndexRouteObject } from "react-router/dist/lib/context";
 import PageNotFound from "../components/views/PageNotFound404/PageNotFound";
 import LoginView from "../components/views/auth/LoginView";
 import AnonymousRequired from "../components/common/wrappers/AnonymousRequired";
 
-const AccountsView = lazy(() => import("../components/views/accounts/AccountsView"));
+const UsersView = lazy(() => import("../components/views/users/UsersView"));
+const GroupsView = lazy(() => import("../components/views/groups/GroupsView"));
 
 export interface RoutePathDefinition extends Omit<NonIndexRouteObject, "children"> {
 	title: string;
@@ -38,9 +38,14 @@ export const routes: RoutePathDefinition[] = [
 			},
 
 			{
-				title: strings.accounts,
-				path: u.ACCOUNTS,
-				element: <RolesRequired requiredRoles={[Role.ADMIN]} outlet={<AccountsView />} />,
+				title: strings.users,
+				path: u.USERS,
+				element: <PermissionRequired permission={"view_appuser"} outlet={<UsersView />} />,
+			},
+			{
+				title: strings.roles,
+				path: u.GROUPS,
+				element: <PermissionRequired permission={"view_group"} outlet={<GroupsView />} />,
 			},
 			{
 				title: strings.page_not_found,

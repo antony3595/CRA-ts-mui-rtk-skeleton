@@ -7,6 +7,10 @@ export const FileItemWrapper = styled(Paper)(({ theme }) => ({
 	borderRadius: "4px",
 	overflow: "hidden",
 	width: "165px",
+	"&.error": {
+		border: "1px solid red",
+	},
+
 	"&:hover, &.Mui-focusVisible, &.Mui-backdropVisible": {
 		zIndex: 2,
 		"& .MuiImageBackdrop-root": {
@@ -44,7 +48,7 @@ export const FileBackdrop = styled("span")(({ theme }) => ({
 	transition: theme.transitions.create("opacity"),
 }));
 export const FileNameWrapper = styled(Box)(({ theme }) => ({
-	padding: theme.spacing(2, 1),
+	padding: theme.spacing(1, 1, 0),
 	boxSizing: "border-box",
 }));
 export const ActionButtons = styled(Stack)(({ theme }) => ({

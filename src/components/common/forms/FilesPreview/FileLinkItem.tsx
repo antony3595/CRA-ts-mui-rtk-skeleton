@@ -5,7 +5,7 @@ import clsx from "clsx";
 import IconButton from "@mui/material/IconButton";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Menu, MenuItem, useMediaQuery, useTheme } from "@mui/material";
+import { Menu, useMediaQuery, useTheme } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { BaseFilePreviewProps } from "./FilePreviewItem";
@@ -39,7 +39,7 @@ export const FileLinkItem = <T extends WithAttachedFileLink>({
 	const actions = useMemo(() => (getActions ? getActions(file, handleClose) : null), [getActions]);
 
 	const handleDownloadClick = (item: T) => {
-		axios.get(item.attached_file, { responseType: "blob" }).then((r) => {
+		axios.get(item.file, { responseType: "blob" }).then((r) => {
 			saveFile(r.data, file.file_name);
 		});
 	};
@@ -47,7 +47,7 @@ export const FileLinkItem = <T extends WithAttachedFileLink>({
 	return (
 		<FileItemWrapper className={clsx([{ "Mui-backdropVisible": open || isMobile }])}>
 			<FileImage>
-				<ImageSrc style={{ backgroundImage: `url(${file.attached_file}), url(${FileIC})` }} />
+				<ImageSrc style={{ backgroundImage: `url(${file.file}), url(${FileIC})` }} />
 				<FileBackdrop onClick={() => onBackdropClick && onBackdropClick(file)} className={"MuiImageBackdrop-root"} />
 				<ActionButtons className="MuiStack-root" direction={"row"}>
 					{!hideDownloadButton && (
@@ -71,9 +71,7 @@ export const FileLinkItem = <T extends WithAttachedFileLink>({
 				</ActionButtons>
 				{actions && showActionsInMenu && (
 					<Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-						{actions.map((action, index) => (
-							<MenuItem key={index}>{action}</MenuItem>
-						))}
+						{actions.map((action) => action)}
 					</Menu>
 				)}
 			</FileImage>

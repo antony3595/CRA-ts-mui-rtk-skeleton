@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { DataGridProps, GridCellParams } from "@mui/x-data-grid";
+import { DataGridProps, GridCellParams, GridSortModel } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { LinearProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
@@ -8,28 +8,11 @@ import MyDataGridPagination from "./MyDataGridPagination";
 import copyStringToClipboard from "../../../utils/windowUtils";
 import { isNumber } from "../../../utils/tsUtils";
 import strings from "../../../constants/strings";
+import { getValidPage, getValidPageSize, gridOrderingToQSValue, qsValueToGridOrdering } from "./datagridUtils";
 
 export interface MyDataGridProps extends DataGridProps {
 	copyCellOnDoubleClick?: boolean;
 }
-
-export const getValidPageSize = (pageSize: string): number => {
-	if (isNumber(pageSize)) {
-		let size = parseInt(pageSize);
-		size = size <= 100 ? size : 100; // page size cannot exceed 100 in DataGrid
-		return size;
-	}
-	return 100; // default page size
-};
-
-export const getValidPage = (page: string): number => {
-	if (isNumber(page)) {
-		let newSize = parseInt(page);
-		newSize = newSize > 1 ? newSize : 1; // page size cannot exceed 100 in DataGrid
-		return newSize;
-	}
-	return 1; // default page
-};
 
 const MyDataGrid: React.FC<MyDataGridProps> = ({ copyCellOnDoubleClick = false, ...restProps }) => {
 	const { enqueueSnackbar } = useSnackbar();
@@ -37,9 +20,16 @@ const MyDataGrid: React.FC<MyDataGridProps> = ({ copyCellOnDoubleClick = false, 
 	const [page, setPage] = useQueryState("page", "0");
 	const [size, setPageSize] = useQueryState("size", "100");
 
+	const [ordering, setOrdering] = useQueryState("ordering"); // Используется для сортировки при sortingMode="server"
+	const sortModel = React.useMemo<GridSortModel>(() => qsValueToGridOrdering(ordering), [ordering]);
+
 	useEffect(() => {
 		if (isNumber(size) && parseInt(size) > 100) setPageSize("100");
 	}, [size, setPageSize]);
+
+	const handleSortModelChange = (newModel: GridSortModel) => {
+		setOrdering(gridOrderingToQSValue(newModel));
+	};
 
 	const copyCellValueToClipboard = (params: GridCellParams) => {
 		if (params.value) {
@@ -71,6 +61,8 @@ const MyDataGrid: React.FC<MyDataGridProps> = ({ copyCellOnDoubleClick = false, 
 							disabled: restProps.loading,
 						},
 					}}
+					sortModel={sortModel}
+					onSortModelChange={handleSortModelChange}
 				/>
 			</div>
 		</div>

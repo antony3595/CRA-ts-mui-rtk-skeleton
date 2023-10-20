@@ -17,14 +17,16 @@ interface MySelectProps extends SelectProps {
 	helperText?: string | string[];
 }
 
-const MySelect: React.FC<MySelectProps> = ({ label, error, helperText, variant, fullWidth, margin, size, ...restProps }) => {
-	return (
-		<FormControl variant={variant} fullWidth={fullWidth} margin={margin} error={error} size={size}>
-			<InputLabel>{label}</InputLabel>
-			<Select MenuProps={MenuProps} {...restProps} label={label} />
-			{helperText && <FormHelperText>{helperText}</FormHelperText>}
-		</FormControl>
-	);
-};
+const MySelect = React.forwardRef<HTMLDivElement, MySelectProps>(
+	({ label, error, helperText, variant, fullWidth, margin, size, ...restProps }, ref) => {
+		return (
+			<FormControl required={restProps.required} ref={ref} variant={variant} fullWidth={fullWidth} margin={margin} error={error} size={size}>
+				<InputLabel>{label}</InputLabel>
+				<Select MenuProps={MenuProps} {...restProps} label={label} />
+				{helperText && <FormHelperText>{helperText}</FormHelperText>}
+			</FormControl>
+		);
+	}
+);
 
 export default MySelect;

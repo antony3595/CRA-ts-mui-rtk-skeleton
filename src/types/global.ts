@@ -23,6 +23,15 @@ export const generateUUID = (): string => {
 export type Without<T, K> = Pick<T, Exclude<keyof T, K>>;
 
 export interface WithAttachedFileLink {
-	attached_file: string;
+	file: string;
 	file_name: string;
 }
+
+declare global {
+	interface RegExpConstructor {
+		quote: (str: string) => string;
+	}
+}
+
+RegExp.quote = (str: string) => str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+

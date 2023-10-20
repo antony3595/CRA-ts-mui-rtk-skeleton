@@ -18,3 +18,9 @@ export const getPercents = (partialValue: number, totalValue: number, decimalPla
 export const stripHtmlTags = (str: string): string => {
 	return str.replaceAll(/<\/?[^>]+(>|$)/gi, "").replaceAll("&nbsp;", "");
 };
+
+export const dotsSubstring = (str: string, start: number, end: number | undefined): string => {
+	const substring = str.substring(start, end);
+	const sliced = str.length > substring.length;
+	return substring + (sliced ? "..." : "");
+};

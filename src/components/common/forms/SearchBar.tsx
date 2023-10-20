@@ -7,9 +7,10 @@ interface SearchBarProps {
 	onChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 	onSubmit: () => void;
 	value: string;
+	fullWidth?: boolean;
 }
 //TODO расширить интерфейс TextField и прокинуть его пропсы, в частности size
-const SearchBar: React.FC<SearchBarProps> = ({ onSubmit, onChange, placeholder, value }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSubmit, onChange, placeholder, value, fullWidth = false }) => {
 	return (
 		<Box
 			component="form"
@@ -18,7 +19,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSubmit, onChange, placeholder, 
 				onSubmit();
 			}}
 		>
-			<FormControl variant="outlined">
+			<FormControl variant="outlined" fullWidth={fullWidth}>
 				<InputLabel>{placeholder}</InputLabel>
 				<OutlinedInput
 					value={value}

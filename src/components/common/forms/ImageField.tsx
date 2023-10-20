@@ -17,9 +17,12 @@ interface ImageFieldProps {
 	helperText?: string;
 	hideDeleteImageButton?: boolean;
 	selectImageText?: string;
+	id?: string;
+	inputProps?: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 }
 
 const ImageField: React.FC<ImageFieldProps> = ({
+	id = "LabelledOutline",
 	onChange,
 	label,
 	sx,
@@ -29,6 +32,7 @@ const ImageField: React.FC<ImageFieldProps> = ({
 	previewImageUrl = null,
 	hideDeleteImageButton = false,
 	selectImageText = strings.upload_image,
+	inputProps,
 }) => {
 	const [fileUrl, setFileUrl] = useState<string | null>(previewImageUrl);
 	const [file, setFile] = useState<File | null>(null);
@@ -51,10 +55,10 @@ const ImageField: React.FC<ImageFieldProps> = ({
 		if (previewImageUrl) {
 			setFileUrl(previewImageUrl);
 		}
-	}, []);
+	}, [previewImageUrl]);
 
 	return (
-		<LabelledOutline label={label} id={"LabelledOutline"} sx={sx} required={required} error={error} helperText={helperText}>
+		<LabelledOutline label={label} id={id} sx={sx} required={required} error={error} helperText={helperText}>
 			<Grid container direction={{ xs: "column", sm: "row" }} justifyContent="space-evenly" spacing={2}>
 				<Grid item xs={12} md={6}>
 					<Stack sx={{ display: "flex", alignItems: "center" }}>
@@ -81,7 +85,7 @@ const ImageField: React.FC<ImageFieldProps> = ({
 						) : (
 							<Stack flexDirection="column" alignItems="center">
 								<NoPhotographyIcon />
-								{strings.no_image}
+								<span>{strings.no_image}</span>
 							</Stack>
 						)}
 					</Stack>
@@ -89,9 +93,9 @@ const ImageField: React.FC<ImageFieldProps> = ({
 
 				<Grid item xs={12} md={6}>
 					<Stack spacing={1} justifyContent="center" display={"flex"} height={"100%"}>
-						<Button variant="outlined" component="label">
+						<Button variant="outlined" sx={{ textAlign: "center" }} component="label">
 							{selectImageText}
-							<input type="file" hidden accept={"image/png"} onChange={(e) => onImageUpload(e)} />
+							<input type="file" hidden accept={"image/png"} onChange={(e) => onImageUpload(e)} {...inputProps} />
 						</Button>
 
 						{fileUrl && !hideDeleteImageButton && (

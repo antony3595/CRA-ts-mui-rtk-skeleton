@@ -8,30 +8,35 @@ import ListItemText from "@mui/material/ListItemText";
 import strings from "../../../../constants/strings";
 import SearchIcon from "@mui/icons-material/Search";
 import { filterArrayBySearchValue } from "../../../../utils/arrayUtils";
-import { KeysOfType } from "../../../../types/global";
 
 export interface TransferListItemProps<T> {
 	items: T[];
 	checked: T[];
 	disableSearchBar?: boolean;
 	handleToggle: (value: T) => void;
-	labelField: KeysOfType<T, string>;
+	getOptionDisplay: (value: T) => string;
 }
 
 const LIST_HEIGHT = 230;
-const LIST_WIDTH = 230;
+const LIST_WIDTH = 270;
 const SEARCHBAR_HEIGHT = 45;
 
-const VirtualizedChecklist = <T,>({ items, handleToggle, checked, labelField, disableSearchBar = false }: TransferListItemProps<T>) => {
+const VirtualizedChecklist = <T,>({
+	items,
+	handleToggle,
+	checked,
+	getOptionDisplay,
+	disableSearchBar = false,
+}: TransferListItemProps<T>) => {
 	const [searchValue, setSearchValue] = useState<string>("");
-	const filteredSearchValues = useMemo(() => filterArrayBySearchValue(items, searchValue, labelField), [searchValue, items]);
+	const filteredSearchValues = useMemo(() => filterArrayBySearchValue(items, searchValue, getOptionDisplay), [searchValue, items]);
 
 	const renderRow = (props: ListChildComponentProps) => {
 		const { index, data, style } = props;
 		const item = data[index];
 		const labelId = `check-list-item-${item}-label`;
 		return (
-			<ListItemButton key={index} style={style} onClick={() => handleToggle(item)}>
+			<ListItemButton key={index} style={style} onClick={() => handleToggle(item)} sx={{ width: "100%" }}>
 				<ListItemIcon>
 					<Checkbox
 						size={"small"}
@@ -43,7 +48,7 @@ const VirtualizedChecklist = <T,>({ items, handleToggle, checked, labelField, di
 						}}
 					/>
 				</ListItemIcon>
-				<ListItemText id={labelId} primary={item[labelField]} />
+				<ListItemText id={labelId} primary={getOptionDisplay(item)} sx={{ whiteSpace: "nowrap" }} />
 			</ListItemButton>
 		);
 	};
@@ -54,6 +59,7 @@ const VirtualizedChecklist = <T,>({ items, handleToggle, checked, labelField, di
 				<Box p={1} boxSizing={"border-box"} width={LIST_WIDTH} height={SEARCHBAR_HEIGHT}>
 					<Box>
 						<TextField
+							fullWidth
 							size={"small"}
 							value={searchValue}
 							variant={"standard"}

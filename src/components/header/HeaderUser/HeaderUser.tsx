@@ -1,10 +1,10 @@
 import React from "react";
 
 import HeaderUserDropdown from "./HeaderUserDropdown";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 import { Avatar, Box, CircularProgress } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectCurrentUser } from "../../../redux/auth/authSlice";
 
 const sxProps = {
 	container: {
@@ -39,7 +39,7 @@ const HeaderUser: React.FC = () => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const isMenuOpen = Boolean(anchorEl);
 	const isLoading = false;
-	const username = useSelector<RootState, string>((state) => state.auth.data.user.username);
+	const { username } = useAppSelector(selectCurrentUser);
 
 	const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);

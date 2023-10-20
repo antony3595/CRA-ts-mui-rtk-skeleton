@@ -9,7 +9,9 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import LogoutButton from "./LogoutButton";
 import ListItemButton from "@mui/material/ListItemButton";
-import { hasOneOfRoles } from "../../../utils/apiUtils";
+import { selectCurrentUser } from "../../../redux/auth/authSlice";
+import { hasPermission } from "../../../redux/utils/authUtils";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface HeaderUserDropdownProps {
 	anchorEl: null | HTMLElement;
@@ -26,8 +28,8 @@ const sxProps = {
 };
 
 const HeaderUserDropdown = ({ anchorEl, isMenuOpen, handleMenuClose, menuId }: HeaderUserDropdownProps) => {
-	const auth = useAppSelector((state) => state.auth);
-	const username = auth.data.user.username;
+	const auth = useAuth();
+	const { username } = useAppSelector(selectCurrentUser);
 	const location = useLocation();
 
 	const [isLoading, setLoading] = useState<boolean>(false);
@@ -50,7 +52,13 @@ const HeaderUserDropdown = ({ anchorEl, isMenuOpen, handleMenuClose, menuId }: H
 			<Divider />
 			<List>
 				{profileLinks
-					.filter((profileLink) => (profileLink.requiredRoles ? hasOneOfRoles(auth, profileLink.requiredRoles) : true))
+					.filter((profileLink) => {
+						const hasRequiredPermission = profileLink.requiredPermission
+							? hasPermission(auth.permissionsMap, profileLink.requiredPermission)
+							: true;
+
+						return hasRequiredPermission;
+					})
 					.map((profileLink, index) => {
 						const isActive = location.pathname.indexOf(profileLink.to) !== -1;
 						return (

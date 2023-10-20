@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 interface LabelledOutlineProps {
 	id?: string;
 	label?: string;
-	children: React.ReactChild;
+	children: React.ReactElement | string;
 	sx?: SxProps<Theme>;
 	required?: boolean;
 	error?: boolean;
@@ -47,7 +47,7 @@ const LabelledOutline: React.FC<LabelledOutlineProps> = ({ id, label, children, 
 						padding: "18.5px 14px",
 					}}
 				>
-					{children}
+					<Box>{children}</Box>
 					<NotchedOutline
 						style={{ borderColor: error ? theme.palette.error.main : undefined }}
 						error={error}

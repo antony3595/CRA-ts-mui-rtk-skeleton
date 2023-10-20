@@ -24,3 +24,19 @@ export const acceptStyle = {
 export const rejectStyle = {
 	borderColor: "#ff1744",
 };
+
+export const thinHorizontalScrollbarSX = {
+	"&::-webkit-scrollbar-track": {
+		WebkitBoxShadow: "inset 0 0 6px rgba(0,0,0,0.3)",
+		backgroundColor: "#F5F5F5",
+	},
+
+	"&::-webkit-scrollbar": {
+		height: "3px",
+		backgroundColor: "#F5F5F5",
+	},
+
+	"&::-webkit-scrollbar-thumb": {
+		backgroundColor: "#000000",
+	},
+};

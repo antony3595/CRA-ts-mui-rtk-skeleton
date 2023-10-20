@@ -1,5 +1,3 @@
-import { Role } from "../api/types/base";
-
 export enum BuildType {
 	PRODUCTION = "production",
 	DEVELOPMENT = "development",
@@ -14,7 +12,6 @@ export interface Config {
 	isProduction: () => boolean;
 	API_URL: string;
 	localStorageKey: string;
-	rolesCanDelete: Role[];
 }
 
 interface OverridableConfig extends Partial<Config> {

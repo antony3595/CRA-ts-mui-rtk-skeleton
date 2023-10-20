@@ -14,8 +14,10 @@ interface MyDropzoneProps {
 	onFileChange: (file: File[] | null) => void;
 	dropzoneOptions?: DropzoneOptions;
 	label?: string;
+	dropzoneText?: string;
 	displayErrors?: boolean;
 	error?: boolean;
+	errors?: string[];
 	helperText?: string;
 	files?: File[];
 }
@@ -38,8 +40,10 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({
 	dropzoneOptions,
 	label,
 	error,
+	errors,
 	helperText,
 	displayErrors = true,
+	dropzoneText = strings.drag_n_drop_file_or_click_and_select,
 }) => {
 	const { enqueueSnackbar } = useSnackbar();
 
@@ -87,12 +91,14 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({
 				<div {...getRootProps({ style })}>
 					<input {...getInputProps()} />
 					<Typography variant={"body2"} color={"textSecondary"}>
-						{strings.drag_n_drop_file_or_click_and_select}
+						{dropzoneText}
 					</Typography>
 				</div>
 				{
 					<Box my={2}>
 						<FilePreviews
+							errors={errors}
+							isError={error}
 							showActionsInMenu={false}
 							getActions={(item, closeMenu) => [
 								<IconButton onClick={() => onDeleteClick(item, closeMenu)} color={"inherit"} size={"small"}>

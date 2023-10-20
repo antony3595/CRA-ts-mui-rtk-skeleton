@@ -4,14 +4,16 @@ import strings from "./strings";
 import * as urls from "../urls";
 import LockIcon from "@mui/icons-material/Lock";
 import PeopleIcon from "@mui/icons-material/People";
-import { Role } from "../api/types/base";
 import { SidebarListItemProps } from "../components/header/SidebarNavigation/SidebarNavLink";
 import { FC } from "react";
+import GroupsIcon from "@mui/icons-material/Groups";
+import { PermissionStr } from "../api/types/permissions";
 
-export interface BaseNavLink {
+export type BaseNavLink = {
 	label: string;
-	requiredRoles?: Role[];
-}
+	requiredPermission?: PermissionStr;
+	requiredPermissions?: PermissionStr[];
+};
 
 export interface NavLink extends BaseNavLink {
 	to: string;
@@ -33,10 +35,16 @@ const adminNavLinks: (NavLink | LinkGroup)[] = [
 		Icon: HomeIcon,
 	},
 	{
-		label: strings.accounts,
-		to: urls.ACCOUNTS,
+		label: strings.users,
+		to: urls.USERS,
 		Icon: PeopleIcon,
-		requiredRoles: [Role.ADMIN],
+		requiredPermission: "view_appuser",
+	},
+	{
+		label: strings.roles,
+		to: urls.GROUPS,
+		Icon: GroupsIcon,
+		requiredPermission: "view_group",
 	},
 ];
 

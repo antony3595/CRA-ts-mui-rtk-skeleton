@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const useQueryState = (queryParam: string, defaultValue = "", resetOther = false): [string, (newValue: string) => void] => {
+const useQueryState = (
+	queryParam: string,
+	defaultValue = "",
+	resetOther = false
+): [string, (newValue: string | undefined | null) => void] => {
 	const [params, setSearchParams] = useSearchParams();
-	const [value, setValue] = useState<string>(params.get(queryParam) || defaultValue);
+	const [value, setValue] = useState<string | undefined | null>(params.get(queryParam) || defaultValue);
 
 	useEffect(() => {
 		const newValue = params.get(queryParam) || defaultValue;
@@ -11,10 +15,10 @@ const useQueryState = (queryParam: string, defaultValue = "", resetOther = false
 	}, [setValue, params, queryParam, defaultValue]);
 
 	const setNewValue = useCallback(
-		(newValue: string) => {
+		(newValue: string | undefined | null) => {
 			const newParams = resetOther ? new URLSearchParams() : params;
-
-			newParams.set(queryParam, newValue);
+			if (newValue) newParams.set(queryParam, newValue);
+			else newParams.delete(queryParam);
 			setSearchParams(newParams);
 		},
 		[resetOther, params, queryParam, setSearchParams]

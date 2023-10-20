@@ -19,11 +19,14 @@ export const loadState = () => {
 };
 
 export const saveState = (state: RootState) => {
-	const storeForSave: Partial<RootState> = {
-		...state,
-		errors: undefined,
-		statuses: undefined,
-	};
-	const serializedStore = JSON.stringify(storeForSave);
-	localStorage.setItem(config.localStorageKey, serializedStore);
+	try {
+		const storeForSave: Partial<RootState> = {
+			auth: state.auth,
+			app: state.app,
+		};
+		const serializedStore = JSON.stringify(storeForSave);
+		localStorage.setItem(config.localStorageKey, serializedStore);
+	} catch (e) {
+		console.log("saveState error");
+	}
 };

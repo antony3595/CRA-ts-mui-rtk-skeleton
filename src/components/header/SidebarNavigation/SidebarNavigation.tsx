@@ -5,11 +5,11 @@ import SidebarNavLink from "./SidebarNavLink";
 import SidebarNavLinkGroup from "./SidebarNavLinkGroup";
 import adminNavLinks, { isLinkGroup, LinkGroup, NavLink } from "../../../constants/navLinks";
 import { useAppSelector } from "../../../redux/hooks";
-import { AuthState, selectAuth } from "../../../redux/auth/authSlice";
-import { hasOneOfRoles } from "../../../utils/apiUtils";
-import { Role } from "../../../api/types/base";
+import { selectAuth } from "../../../redux/auth/authSlice";
 import strings from "../../../constants/strings";
 import { ListSubheader } from "@mui/material";
+import { AuthState } from "../../../redux/auth/types";
+import { hasPermission, hasPermissions } from "../../../redux/utils/authUtils";
 
 interface SidebarNavigationProps {
 	closeSidebar: () => void;
@@ -17,7 +17,11 @@ interface SidebarNavigationProps {
 
 const getFilteredNavLinks = (links: (NavLink | LinkGroup)[], auth: AuthState, closeSidebar: () => void) =>
 	links
-		.filter((navlink) => (navlink.requiredRoles ? hasOneOfRoles(auth, navlink.requiredRoles) : true))
+		.filter(
+			(navlink) =>
+				(navlink.requiredPermission ? hasPermission(auth.permissionsMap, navlink.requiredPermission) : true) &&
+				(navlink.requiredPermissions ? hasPermissions(auth.permissionsMap, navlink.requiredPermissions) : true)
+		)
 		.map((link, index) =>
 			isLinkGroup(link) ? (
 				<SidebarNavLinkGroup onClick={() => closeSidebar()} key={index} link={link} />
@@ -31,16 +35,17 @@ const getFilteredNavLinks = (links: (NavLink | LinkGroup)[], auth: AuthState, cl
 const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ closeSidebar }) => {
 	const auth = useAppSelector(selectAuth);
 
+	const filteredNavLinks = getFilteredNavLinks(adminNavLinks, auth, closeSidebar);
 	return (
 		<div>
 			<div>
 				<Divider />
 
 				<List dense>
-					{hasOneOfRoles(auth, [Role.ADMIN, Role.MANAGER]) && (
+					{filteredNavLinks.length && (
 						<ListSubheader sx={{ backgroundColor: "secondary.main" }}>{strings.administration}</ListSubheader>
 					)}
-					{getFilteredNavLinks(adminNavLinks, auth, closeSidebar)}
+					{filteredNavLinks}
 				</List>
 			</div>
 		</div>

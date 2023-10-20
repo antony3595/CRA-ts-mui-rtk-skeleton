@@ -3,7 +3,7 @@ import config from "../config";
 import { BasicCredentials, TokenDTO } from "./types/auth";
 import * as ep from "./endpoints";
 import { BaseResponse } from "./types/base";
-import { getStoredToken } from "../redux/utils/auth";
+import { getStoredToken } from "../redux/utils/authUtils";
 import { store } from "../redux/store";
 import { logout } from "../redux/commonActions";
 

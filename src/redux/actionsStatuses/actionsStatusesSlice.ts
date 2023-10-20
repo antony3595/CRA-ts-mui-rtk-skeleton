@@ -2,24 +2,32 @@ import { StateStatus } from "../types";
 import { createSlice } from "@reduxjs/toolkit";
 import { ActionsStatusesState, ActionStatusKey, AsyncActions } from "./types";
 import { addAsyncActionsCases } from "./loadingUtils";
-import { fetchAccounts, fetchAllAccountsMin } from "../content/accounts/accountsSlice";
-import { fetchAllGroups } from "../content/groups/groupsSlice";
+import { fetchAllUsers, fetchUsers } from "../content/users/usersSlice";
+import { fetchAllGroups, fetchPaginatedGroups } from "../content/groups/groupsSlice";
 import { logout } from "../commonActions";
 import { RootState } from "../store";
-import { fetchToken } from "../auth/authSlice";
+import { fetchCurrentUser, fetchToken } from "../auth/authSlice";
+import { fetchAllPermissions } from "../content/permissions/permissionsSlice";
 
 export const initialState: ActionsStatusesState = {
-	auth: StateStatus.INITIAL,
-	accounts: StateStatus.INITIAL,
-	accountsAllMin: StateStatus.INITIAL,
-	groups: StateStatus.INITIAL,
+	token: StateStatus.INITIAL,
+	currentUserData: StateStatus.INITIAL,
+
+	users: StateStatus.INITIAL,
+	allUsers: StateStatus.INITIAL,
+	allGroups: StateStatus.INITIAL,
+	paginatedGroups: StateStatus.INITIAL,
+	allPermissions: StateStatus.INITIAL,
 };
 
 const asyncActions: AsyncActions = {
-	auth: fetchToken,
-	accounts: fetchAccounts,
-	accountsAllMin: fetchAllAccountsMin,
-	groups: fetchAllGroups,
+	token: fetchToken,
+	currentUserData: fetchCurrentUser,
+	users: fetchUsers,
+	allUsers: fetchAllUsers,
+	allGroups: fetchAllGroups,
+	paginatedGroups: fetchPaginatedGroups,
+	allPermissions: fetchAllPermissions,
 };
 
 const actionsStatusesSlice = createSlice({

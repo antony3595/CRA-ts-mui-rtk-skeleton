@@ -1,14 +1,18 @@
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isString } from "formik";
 import BrokenImageIcon from "@mui/icons-material/BrokenImage";
 import { Popover, Tooltip } from "@mui/material";
 import strings from "../../../../constants/strings";
 
-export const ImageCell = <T,>(params: GridRenderCellParams<T>) => {
+export const ImageCellComponent = <T,>({ params }: { params: GridRenderCellParams<T> }) => {
 	const [isError, setError] = useState<boolean>(false);
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+	useEffect(() => {
+		setError(false);
+	}, [params.value]);
 
 	const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -57,4 +61,8 @@ export const ImageCell = <T,>(params: GridRenderCellParams<T>) => {
 			<span>{params.value || ""}</span>
 		</Tooltip>
 	);
+};
+
+export const ImageCell = <T,>(params: GridRenderCellParams<T>) => {
+	return <ImageCellComponent params={params} />;
 };

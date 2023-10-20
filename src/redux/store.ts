@@ -4,8 +4,9 @@ import authReducer from "./auth/authSlice";
 import actionsStatusesReducer from "./actionsStatuses/actionsStatusesSlice";
 import actionsErrorsReducer from "./actionsErrors/actionsErrorsSlice";
 import { loadState, saveState } from "../utils/localStorageUtils";
-import accountsReducer from "./content/accounts/accountsSlice";
+import usersReducer from "./content/users/usersSlice";
 import groupsReducer from "./content/groups/groupsSlice";
+import permissionsReducer from "./content/permissions/permissionsSlice";
 
 const persistedState = loadState();
 
@@ -15,8 +16,9 @@ const rootReducer = combineReducers({
 	errors: actionsErrorsReducer,
 	auth: authReducer,
 	adminContent: combineReducers({
-		accounts: accountsReducer,
+		users: usersReducer,
 		groups: groupsReducer,
+		permissions: permissionsReducer,
 	}),
 });
 

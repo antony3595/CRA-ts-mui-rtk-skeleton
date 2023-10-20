@@ -17,6 +17,8 @@ type FilePreviewProps<T extends File, L extends WithAttachedFileLink> = BaseFile
 				getActions?: (item: T, closeMenu: () => void) => React.ReactNode[];
 				onLinkBackdropClick?: never;
 				onFileBackdropClick?: (item: T) => void;
+				error?: boolean;
+				helperText?: string;
 		  }
 		| {
 				file?: never;
@@ -25,6 +27,8 @@ type FilePreviewProps<T extends File, L extends WithAttachedFileLink> = BaseFile
 				getActions?: never;
 				onLinkBackdropClick?: (item: L) => void;
 				onFileBackdropClick?: never;
+				error?: never;
+				helperText?: never;
 		  }
 	);
 
@@ -37,6 +41,8 @@ const FilePreviewItem = <T extends File, L extends WithAttachedFileLink>({
 	onFileBackdropClick,
 	showActionsInMenu = true,
 	hideDownloadButton = false,
+	error,
+	helperText,
 }: FilePreviewProps<T, L>) => {
 	return (
 		<>
@@ -47,6 +53,8 @@ const FilePreviewItem = <T extends File, L extends WithAttachedFileLink>({
 					file={file}
 					getActions={getActions}
 					hideDownloadButton={hideDownloadButton}
+					error={error}
+					helperText={helperText}
 				/>
 			)}
 			{fileLink && (

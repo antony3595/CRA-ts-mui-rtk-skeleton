@@ -1,24 +1,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ActionErrorKey, ActionsErrorsState, AsyncActions } from "./types";
 import { actionErrorsInitialState, addAsyncActionsCases } from "./errorsUtils";
-import { fetchAccounts, fetchAllAccountsMin } from "../content/accounts/accountsSlice";
-import { fetchAllGroups } from "../content/groups/groupsSlice";
+import { fetchAllUsers, fetchUsers } from "../content/users/usersSlice";
+import { fetchAllGroups, fetchPaginatedGroups } from "../content/groups/groupsSlice";
 import { logout } from "../commonActions";
 import { RootState } from "../store";
-import { fetchToken } from "../auth/authSlice";
+import { fetchCurrentUser, fetchToken } from "../auth/authSlice";
+import { fetchAllPermissions } from "../content/permissions/permissionsSlice";
 
 export const initialState: ActionsErrorsState = {
-	auth: actionErrorsInitialState,
-	accounts: actionErrorsInitialState,
-	accountsAllMin: actionErrorsInitialState,
-	groups: actionErrorsInitialState,
+	token: actionErrorsInitialState,
+	currentUserData: actionErrorsInitialState,
+	users: actionErrorsInitialState,
+	allUsers: actionErrorsInitialState,
+	allGroups: actionErrorsInitialState,
+	paginatedGroups: actionErrorsInitialState,
+	allPermissions: actionErrorsInitialState,
 };
 
 const asyncActions: AsyncActions = {
-	auth: fetchToken,
-	accounts: fetchAccounts,
-	accountsAllMin: fetchAllAccountsMin,
-	groups: fetchAllGroups,
+	token: fetchToken,
+	currentUserData: fetchCurrentUser,
+	users: fetchUsers,
+	allUsers: fetchAllUsers,
+	allGroups: fetchAllGroups,
+	paginatedGroups: fetchPaginatedGroups,
+	allPermissions: fetchAllPermissions,
 };
 
 const actionsErrorsSlice = createSlice({
@@ -41,10 +48,10 @@ export const { clearError } = actionsErrorsSlice.actions;
 
 export const errorsSelector = (state: RootState) => state.errors;
 
-export const createErrorsSelector = (keys: ActionErrorKey[]) => (state: RootState) => {
-	return keys.map((key) => state.errors[key as ActionErrorKey]);
-};
-
-export const createErrorSelector = (key: ActionErrorKey) => (state: RootState) => state.errors[key];
+export const createFormErrorsSelector =
+	<K extends ActionErrorKey>(key: K) =>
+	(state: RootState): ActionsErrorsState[K]["errors"] => {
+		return state.errors[key as ActionErrorKey].errors;
+	};
 
 export default actionsErrorsSlice.reducer;
